@@ -5,8 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpftest"
         mc:Ignorable="d"
-        WindowState="Normal" StateChanged="Window_StateChanged"
-        Title="WPFtest" Height="780" Width="1200">
+        WindowState="Normal" 
+        StateChanged="Window_StateChanged"
+        Title="WPFtest" Height="780" Width="1200"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Loaded="Window_Loaded"
+        >
+
+    <Window.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="2"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value="#FF656573"/>
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="#FF838398" CornerRadius="5">
     <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -14,23 +44,20 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0" Text="CheatSheets" FontSize="28" TextAlignment="Center"/>
-
-        <ScrollViewer
-            Grid.Row="1"
-            Margin="0 0 0 0"
-            VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="ImgList">
-                <ItemsControl.ItemTemplate>
+            <ListBox KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle"  x:Name="ImgList" SelectionMode="Single">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Image Margin="20 20 20 20" Source="{Binding}" Stretch="UniformToFill" Height="300" Width="300"/>
+                        <ListBoxItem Padding="10" Width="300" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Image Margin="10" Source="{Binding}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                        </ListBoxItem>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <UniformGrid/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+                </ListBox.ItemsPanel>
+            </ListBox>
     </Grid>
+    </Border>
 </Window>

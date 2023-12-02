@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 
 namespace Wpftest
@@ -50,7 +50,8 @@ namespace Wpftest
         {
             notyIcon = new NotifyIcon();
 
-            notyIcon.Icon = new Icon("Icon.ico");
+            // Get the image resource
+            notyIcon.Icon = Resource1.Icon;
             notyIcon.Click += new EventHandler(TrayIconClick);
             notyIcon.Visible = true;
 
@@ -120,10 +121,52 @@ namespace Wpftest
             RegisterHotKey(helper.Handle, HOTKEY_ID, (int)keymodifier.control, (int)Keys.F7);
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ImgList.Focus();
+            ImgList.SelectedIndex = 0;
+        }
+
         private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
             ScrollViewer scrollViewer = (ScrollViewer)sender;
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+        }
+
+        private void ImgList_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (ImgList.SelectedItem != null)
+                {
+                    // Get the selected item
+                    string selectedItemPath = ImgList.SelectedItem as string;
+
+                    // Pass the selected item to your desired method or event handler
+                    if (!String.IsNullOrEmpty(selectedItemPath))
+                    {
+                        OpenFileByPath(selectedItemPath);
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("Incorrect Image Path");
+                    }
+                }
+            }
+        }
+
+        private void OpenFileByPath(string path)
+        {
+            string argument = "/open, \"" + path + "\"";
+
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", argument);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error opening file: {ex.Message}");
+            }
         }
 
         protected override void OnClosed(EventArgs e)
