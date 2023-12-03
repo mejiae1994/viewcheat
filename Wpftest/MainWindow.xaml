@@ -26,7 +26,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
-                                <Setter TargetName="_Border" Property="Background" Value="#FF656573"/>
+                                <Setter TargetName="_Border" Property="Background" Value="#FF7A7A90"/>
                                 <Setter Property="Foreground" Value="Red"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -36,25 +36,69 @@
         </Style>
     </Window.Resources>
 
-    <Border Background="#FF838398" CornerRadius="5">
+    <Border Background="#FF3D3D4D" CornerRadius="5">
     <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="0" Text="CheatSheets" FontSize="28" TextAlignment="Center"/>
-            <ListBox KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle"  x:Name="ImgList" SelectionMode="Single">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="25"/>
+                </Grid.ColumnDefinitions>
+                <!--Menu Section-->
+                <Button Grid.Column="0" Background="#FFB4B4D4">
+                    <Menu>
+                        <MenuItem Header="=" Background="#FFB4B4D4">
+                        <MenuItem x:Name="MenuChangeDirectory" Header="Change Directory" Click="MenuChangeDirectory_CLick"/>
+                    </MenuItem>
+                    </Menu>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Height="25" CornerRadius="5"
+                                Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <!--Menu Section-->
+                    <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />
+                <Button Margin="0 0 4 0" Click="Minimize_Button" Grid.Column="2" Background="#FFB4B4D4" Content="-" FontSize="16" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Height="30" CornerRadius="5"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Margin="0 0 4 0" Click="Close_Button" Grid.Column="3" Background="#FFB4B4D4" Content="X" FontSize="16" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Height="30" CornerRadius="5"
+                Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            <ListBox VirtualizingStackPanel.IsVirtualizing="False" HorizontalAlignment="Center" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ListBoxItem Padding="10" Width="300" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <Image Margin="10" Source="{Binding}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                        <ListBoxItem Padding="10" Width="300" Height="300" HorizontalAlignment="Center" VerticalAlignment="Top" >
+                            <Image  Margin="10" Source="{Binding}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
                         </ListBoxItem>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid/>
+                        <WrapPanel />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

@@ -9,6 +9,11 @@
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Resource1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

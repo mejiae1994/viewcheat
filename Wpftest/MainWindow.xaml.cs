@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,9 +27,11 @@ namespace Wpftest
         private HwndSource _source;
         private const int HOTKEY_ID = 9000;
         private const int WM_HOTKEY = 0x0312;
-        private const string ImageFolderName = "Images";
+        private const string DIRECTORYPATH_KEY = "directoryPath";
 
-        public IEnumerable<string> ImagePaths { get; set; }
+        private ObservableCollection<string> imagePaths;
+
+        private Configuration _config;
 
         enum keymodifier
         {
@@ -39,11 +42,13 @@ namespace Wpftest
             winkey = 8
         }
 
-        public MainWindow()
+        public MainWindow(Configuration config)
         {
             InitializeComponent();
-            AddNotifyIcon();
+            _config = config;
+            InitImageDirectory();
             LoadImgPaths();
+            AddNotifyIcon();
         }
 
         private void AddNotifyIcon()
@@ -61,21 +66,31 @@ namespace Wpftest
             }
         }
 
+        private void InitImageDirectory()
+        {
+            KeyValueConfigurationCollection section = _config.AppSettings.Settings;
+
+            if (String.IsNullOrEmpty(section[DIRECTORYPATH_KEY].Value))
+            {
+                SaveNewDirectoryPath(Directory.GetCurrentDirectory());
+            }
+        }
+
         private void LoadImgPaths()
         {
-            var currentDirectory = AppDomain.CurrentDomain.BaseDirectory + ImageFolderName;
+            var currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
 
             if (Directory.Exists(currentDirectory))
             {
                 var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
                 try
                 {
-                    ImagePaths = Directory.GetFiles(currentDirectory).Where(file => imageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
-                    ImgList.ItemsSource = ImagePaths;
+                    var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => imageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
+                    imagePaths = new ObservableCollection<string>(directoryFiles);
+                    ImgList.ItemsSource = imagePaths;
                 }
                 catch (IOException ex)
                 {
-                    // Handle general IO exception
                     Console.WriteLine($"IO exception: {ex.Message}");
                 }
             }
@@ -197,6 +212,45 @@ namespace Wpftest
                 }
             }
             return IntPtr.Zero;
+        }
+
+        private void Close_Button(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Minimize_Button(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MenuChangeDirectory_CLick(object sender, RoutedEventArgs e)
+        {
+            string prefferedPath = "";
+            System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
+            var result = openFileDlg.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK || result == System.Windows.Forms.DialogResult.OK)
+            {
+                prefferedPath = openFileDlg.SelectedPath;
+                SaveNewDirectoryPath(prefferedPath);
+                LoadImgPaths();
+            }
+        }
+
+        private void SaveNewDirectoryPath(string newPath)
+        {
+            try
+            {
+                KeyValueConfigurationCollection section = _config.AppSettings.Settings;
+                section[DIRECTORYPATH_KEY].Value = newPath;
+                _config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(_config.AppSettings.SectionInformation.Name);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
