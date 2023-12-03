@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
@@ -9,6 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Wpftest
 {
@@ -29,7 +32,7 @@ namespace Wpftest
         private const int WM_HOTKEY = 0x0312;
         private const string DIRECTORYPATH_KEY = "directoryPath";
 
-        private ObservableCollection<string> imagePaths;
+        public ObservableCollection<ImageSource> imageSourceCollection { get; set; }
 
         private Configuration _config;
 
@@ -44,10 +47,11 @@ namespace Wpftest
 
         public MainWindow(Configuration config)
         {
+            imageSourceCollection = new ObservableCollection<ImageSource>();
             InitializeComponent();
             _config = config;
             InitImageDirectory();
-            LoadImgPaths();
+            GetImgPaths();
             AddNotifyIcon();
         }
 
@@ -76,23 +80,43 @@ namespace Wpftest
             }
         }
 
-        private void LoadImgPaths()
+        private void GetImgPaths()
         {
             var currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
 
             if (Directory.Exists(currentDirectory))
             {
-                var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".svg" };
                 try
                 {
                     var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => imageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
-                    imagePaths = new ObservableCollection<string>(directoryFiles);
-                    ImgList.ItemsSource = imagePaths;
+
+                    LoadImagesFromPaths(directoryFiles);
                 }
                 catch (IOException ex)
                 {
                     Console.WriteLine($"IO exception: {ex.Message}");
                 }
+            }
+        }
+
+        private void LoadImagesFromPaths(IEnumerable<string> imgPaths)
+        {
+            imageSourceCollection.Clear();
+
+            foreach (var imgPath in imgPaths)
+            {
+                Stream stream = File.OpenRead(imgPath);
+                BitmapImage bitMapImg = new BitmapImage();
+                bitMapImg.BeginInit();
+                bitMapImg.CacheOption = BitmapCacheOption.OnLoad;
+                bitMapImg.StreamSource = stream;
+                bitMapImg.DecodePixelHeight = 720;
+                bitMapImg.DecodePixelWidth = 720;
+                bitMapImg.EndInit();
+                bitMapImg.Freeze();
+                imageSourceCollection.Add(bitMapImg);
+                stream.Dispose();
             }
         }
 
@@ -155,12 +179,12 @@ namespace Wpftest
                 if (ImgList.SelectedItem != null)
                 {
                     // Get the selected item
-                    string selectedItemPath = ImgList.SelectedItem as string;
+                    BitmapImage selectedItemPath = ImgList.SelectedItem as BitmapImage;
+                    string sourceName = ((System.IO.FileStream)(selectedItemPath).StreamSource).Name;
 
-                    // Pass the selected item to your desired method or event handler
-                    if (!String.IsNullOrEmpty(selectedItemPath))
+                    if (!String.IsNullOrEmpty(sourceName))
                     {
-                        OpenFileByPath(selectedItemPath);
+                        OpenFileByPath(sourceName);
                     }
                     else
                     {
@@ -234,7 +258,7 @@ namespace Wpftest
             {
                 prefferedPath = openFileDlg.SelectedPath;
                 SaveNewDirectoryPath(prefferedPath);
-                LoadImgPaths();
+                GetImgPaths();
             }
         }
 
