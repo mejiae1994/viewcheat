@@ -11,6 +11,7 @@
         WindowStyle="None"
         x:Name="myWindow"
         AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         >
 
