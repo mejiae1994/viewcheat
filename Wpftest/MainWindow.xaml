@@ -54,8 +54,8 @@
                 <Button Grid.Column="0" Background="#FFB4B4D4">
                     <Menu>
                         <MenuItem Header="=" Background="#FFB4B4D4">
-                        <MenuItem x:Name="MenuChangeDirectory" Header="Change Directory" Click="MenuChangeDirectory_CLick"/>
-                    </MenuItem>
+                            <MenuItem x:Name="MenuChangeDirectory" Header="Change Directory" Click="MenuChangeDirectory_CLick"/>
+                        </MenuItem>
                     </Menu>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -67,7 +67,7 @@
                     </Button.Template>
                 </Button>
                 <!--Menu Section-->
-                    <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />
+                <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />
                 <Button Margin="0 0 4 0" Click="Minimize_Button" Grid.Column="2" Background="#FFB4B4D4" Content="-" FontSize="16" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">

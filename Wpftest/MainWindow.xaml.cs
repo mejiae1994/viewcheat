@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -51,7 +53,7 @@ namespace Wpftest
             InitializeComponent();
             _config = config;
             InitImageDirectory();
-            GetImgPaths();
+
             AddNotifyIcon();
         }
 
@@ -80,7 +82,7 @@ namespace Wpftest
             }
         }
 
-        private void GetImgPaths()
+        private async Task<ObservableCollection<ImageSource>> GetImgPaths()
         {
             var currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
 
@@ -91,33 +93,53 @@ namespace Wpftest
                 {
                     var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => imageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
 
-                    LoadImagesFromPaths(directoryFiles);
+                    return await Task.Run(() => LoadImagesFromPaths(directoryFiles));
                 }
                 catch (IOException ex)
                 {
                     Console.WriteLine($"IO exception: {ex.Message}");
                 }
             }
+            return new ObservableCollection<ImageSource>();
         }
 
-        private void LoadImagesFromPaths(IEnumerable<string> imgPaths)
+        private async Task<ObservableCollection<ImageSource>> LoadImagesFromPaths(IEnumerable<string> imgPaths)
         {
-            imageSourceCollection.Clear();
-
+            ObservableCollection<ImageSource> sourceCollection = new ObservableCollection<ImageSource>();
+            Stopwatch watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
             foreach (var imgPath in imgPaths)
             {
-                Stream stream = File.OpenRead(imgPath);
-                BitmapImage bitMapImg = new BitmapImage();
-                bitMapImg.BeginInit();
-                bitMapImg.CacheOption = BitmapCacheOption.OnLoad;
-                bitMapImg.StreamSource = stream;
-                bitMapImg.DecodePixelHeight = 720;
-                bitMapImg.DecodePixelWidth = 720;
-                bitMapImg.EndInit();
-                bitMapImg.Freeze();
-                imageSourceCollection.Add(bitMapImg);
-                stream.Dispose();
+                using (FileStream SourceStream = new FileStream(imgPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous))
+                {
+
+                    //sourceCollection.Add(await CreateBitMapImage(imgPath));
+                    sourceCollection.Add(await CreateBitMapImage(imgPath));
+
+                }
             }
+            watch.Stop();
+            System.Diagnostics.Debug.WriteLine(watch.ElapsedMilliseconds + " ms.");
+            return sourceCollection;
+        }
+
+        private async Task<BitmapImage> CreateBitMapImage(string imgPath)
+        {
+            return await Task.Run(() =>
+            {
+                BitmapImage bitMapImg = new BitmapImage();
+                using (FileStream SourceStream = new FileStream(imgPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous))
+                {
+                    bitMapImg.BeginInit();
+                    bitMapImg.CacheOption = BitmapCacheOption.OnLoad;
+                    bitMapImg.DecodePixelHeight = 400;
+                    bitMapImg.DecodePixelWidth = 400;
+                    bitMapImg.StreamSource = SourceStream;
+                    bitMapImg.EndInit();
+                }
+                bitMapImg.Freeze();
+                return bitMapImg;
+            });
         }
 
         private void ActivateWindowToFront()
@@ -160,8 +182,11 @@ namespace Wpftest
             RegisterHotKey(helper.Handle, HOTKEY_ID, (int)keymodifier.control, (int)Keys.F7);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ObservableCollection<ImageSource> images = await GetImgPaths();
+            imageSourceCollection = images;
+            ImgList.ItemsSource = imageSourceCollection;
             ImgList.Focus();
             ImgList.SelectedIndex = 0;
         }
@@ -248,7 +273,7 @@ namespace Wpftest
             WindowState = WindowState.Minimized;
         }
 
-        private void MenuChangeDirectory_CLick(object sender, RoutedEventArgs e)
+        private async void MenuChangeDirectory_CLick(object sender, RoutedEventArgs e)
         {
             string prefferedPath = "";
             System.Windows.Forms.FolderBrowserDialog openFileDlg = new System.Windows.Forms.FolderBrowserDialog();
@@ -258,7 +283,9 @@ namespace Wpftest
             {
                 prefferedPath = openFileDlg.SelectedPath;
                 SaveNewDirectoryPath(prefferedPath);
-                GetImgPaths();
+                ObservableCollection<ImageSource> images = await GetImgPaths();
+                imageSourceCollection = images;
+                ImgList.ItemsSource = imageSourceCollection;
             }
         }
 
