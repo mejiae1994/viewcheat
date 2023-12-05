@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Wpftest
@@ -34,8 +28,6 @@ namespace Wpftest
         private const int WM_HOTKEY = 0x0312;
         private const string DIRECTORYPATH_KEY = "directoryPath";
 
-        public ObservableCollection<ImageSource> imageSourceCollection { get; set; }
-
         private Configuration _config;
 
         enum keymodifier
@@ -49,11 +41,9 @@ namespace Wpftest
 
         public MainWindow(Configuration config)
         {
-            imageSourceCollection = new ObservableCollection<ImageSource>();
-            InitializeComponent();
             _config = config;
             InitImageDirectory();
-
+            InitializeComponent();
             AddNotifyIcon();
         }
 
@@ -80,66 +70,6 @@ namespace Wpftest
             {
                 SaveNewDirectoryPath(Directory.GetCurrentDirectory());
             }
-        }
-
-        private async Task<ObservableCollection<ImageSource>> GetImgPaths()
-        {
-            var currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
-
-            if (Directory.Exists(currentDirectory))
-            {
-                var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".svg" };
-                try
-                {
-                    var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => imageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
-
-                    return await Task.Run(() => LoadImagesFromPaths(directoryFiles));
-                }
-                catch (IOException ex)
-                {
-                    Console.WriteLine($"IO exception: {ex.Message}");
-                }
-            }
-            return new ObservableCollection<ImageSource>();
-        }
-
-        private async Task<ObservableCollection<ImageSource>> LoadImagesFromPaths(IEnumerable<string> imgPaths)
-        {
-            ObservableCollection<ImageSource> sourceCollection = new ObservableCollection<ImageSource>();
-            Stopwatch watch = new System.Diagnostics.Stopwatch();
-            watch.Start();
-            foreach (var imgPath in imgPaths)
-            {
-                using (FileStream SourceStream = new FileStream(imgPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous))
-                {
-
-                    //sourceCollection.Add(await CreateBitMapImage(imgPath));
-                    sourceCollection.Add(await CreateBitMapImage(imgPath));
-
-                }
-            }
-            watch.Stop();
-            System.Diagnostics.Debug.WriteLine(watch.ElapsedMilliseconds + " ms.");
-            return sourceCollection;
-        }
-
-        private async Task<BitmapImage> CreateBitMapImage(string imgPath)
-        {
-            return await Task.Run(() =>
-            {
-                BitmapImage bitMapImg = new BitmapImage();
-                using (FileStream SourceStream = new FileStream(imgPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous))
-                {
-                    bitMapImg.BeginInit();
-                    bitMapImg.CacheOption = BitmapCacheOption.OnLoad;
-                    bitMapImg.DecodePixelHeight = 400;
-                    bitMapImg.DecodePixelWidth = 400;
-                    bitMapImg.StreamSource = SourceStream;
-                    bitMapImg.EndInit();
-                }
-                bitMapImg.Freeze();
-                return bitMapImg;
-            });
         }
 
         private void ActivateWindowToFront()
@@ -184,9 +114,6 @@ namespace Wpftest
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ObservableCollection<ImageSource> images = await GetImgPaths();
-            imageSourceCollection = images;
-            ImgList.ItemsSource = imageSourceCollection;
             ImgList.Focus();
             ImgList.SelectedIndex = 0;
         }
@@ -283,9 +210,11 @@ namespace Wpftest
             {
                 prefferedPath = openFileDlg.SelectedPath;
                 SaveNewDirectoryPath(prefferedPath);
-                ObservableCollection<ImageSource> images = await GetImgPaths();
-                imageSourceCollection = images;
-                ImgList.ItemsSource = imageSourceCollection;
+                string currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
+                if (DataContext is MainViewModel viewModel)
+                {
+                    viewModel.getImageSources(currentDirectory);
+                }
             }
         }
 

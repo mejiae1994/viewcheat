@@ -4,9 +4,9 @@ namespace Wpftest
 {
     public class ImageModel
     {
-        public ImageSource? Source { get; set; }
+        public ImageSource imgSource { get; set; }
 
-        public string? Uri { get; set; }
+        public string uri { get; set; }
 
         public ImageModel()
         {

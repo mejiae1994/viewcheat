@@ -9,7 +9,6 @@
         StateChanged="Window_StateChanged"
         Title="WPFtest" Height="780" Width="1200"
         WindowStyle="None"
-        x:Name="myWindow"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
@@ -89,11 +88,11 @@
                     </Button.Template>
                 </Button>
             </Grid>
-            <ListBox ItemsSource="{Binding ElementName=myWindow, Path=imageSourceCollection, Mode=OneWay}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
+            <ListBox ItemsSource="{Binding Images}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <ListBoxItem Padding="10" Width="300" Height="300">
-                            <Image  Margin="10" Source="{Binding}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                            <Image  Margin="10" Source="{Binding imgSource}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
                         </ListBoxItem>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
