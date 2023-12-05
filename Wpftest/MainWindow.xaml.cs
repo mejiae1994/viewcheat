@@ -136,7 +136,6 @@ namespace Wpftest
                 else
                 {
                     System.Windows.MessageBox.Show("Incorrect Image Path");
-                    //System.Diagnostics.Debug.WriteLine($"Incorrect Image Path");
                 }
             }
         }

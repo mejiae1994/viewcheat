@@ -8,6 +8,8 @@ namespace Wpftest
 
         public string uri { get; set; }
 
+        public string imageName { get; set; }
+
         public ImageModel()
         {
 

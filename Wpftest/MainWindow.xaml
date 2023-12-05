@@ -27,7 +27,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter TargetName="_Border" Property="Background" Value="#FF7A7A90"/>
-                                <Setter Property="Foreground" Value="Red"/>
+                                <Setter Property="Foreground" Value="Black"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -91,8 +91,11 @@
             <ListBox ItemsSource="{Binding Images}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ListBoxItem Padding="10" Width="300" Height="300">
-                            <Image  Margin="10" Source="{Binding imgSource}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                        <ListBoxItem Padding="10" Width="300" Height="320">
+                            <StackPanel>
+                                <Image Margin="10" Source="{Binding imgSource}" Stretch="Fill" RenderOptions.BitmapScalingMode="Fant"/>
+                                <TextBlock Text="{Binding imageName}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </StackPanel>
                         </ListBoxItem>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

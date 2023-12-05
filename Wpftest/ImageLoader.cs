@@ -46,7 +46,8 @@ namespace Wpftest
                     ImageModel imgModel = new()
                     {
                         imgSource = await CreateBitMapImageFromFile(imgPath),
-                        uri = imgPath
+                        uri = imgPath,
+                        imageName = GetFileNameNoExt(imgPath)
                     };
                     sourceCollection.Add(imgModel);
                 }
@@ -73,6 +74,12 @@ namespace Wpftest
                 bitMapImg.Freeze();
                 return bitMapImg;
             });
+        }
+
+        private static string GetFileNameNoExt(string uri)
+        {
+            string[] uriParts = uri.Split('\\');
+            return Path.GetFileNameWithoutExtension(uriParts[uriParts.Length - 1]);
         }
     }
 }
