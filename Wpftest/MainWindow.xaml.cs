@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 
 namespace Wpftest
 {
@@ -126,24 +125,25 @@ namespace Wpftest
 
         private void ImgList_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && ImgList.SelectedItem is ImageModel selectedImage)
             {
-                if (ImgList.SelectedItem != null)
-                {
-                    // Get the selected item
-                    BitmapImage selectedItemPath = ImgList.SelectedItem as BitmapImage;
-                    string sourceName = ((System.IO.FileStream)(selectedItemPath).StreamSource).Name;
+                logToDebug($"value for selectedImage: {selectedImage.uri}");
 
-                    if (!String.IsNullOrEmpty(sourceName))
-                    {
-                        OpenFileByPath(sourceName);
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("Incorrect Image Path");
-                    }
+                if (!String.IsNullOrEmpty(selectedImage.uri))
+                {
+                    OpenFileByPath(selectedImage.uri);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Incorrect Image Path");
+                    //System.Diagnostics.Debug.WriteLine($"Incorrect Image Path");
                 }
             }
+        }
+
+        private void logToDebug(string logMessage)
+        {
+            System.Diagnostics.Debug.WriteLine(logMessage);
         }
 
         private void OpenFileByPath(string path)
