@@ -50,7 +50,7 @@
                     <ColumnDefinition Width="25"/>
                 </Grid.ColumnDefinitions>
                 <!--Menu Section-->
-                <Button Grid.Column="0" FontSize="12" FontWeight="Medium" Content="Change DIR" Cursor="Hand" Background="#FFB4B4D4" Click="MenuChangeDirectory_CLick">
+                <Button  ToolTipService.InitialShowDelay="10" ToolTipService.HorizontalOffset="230" ToolTipService.VerticalOffset="-35" Grid.Column="0" FontSize="12" FontWeight="Medium" Content="Change DIR" Cursor="Hand" Background="#FFB4B4D4" Click="MenuChangeDirectory_CLick">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Height="25" CornerRadius="3"
@@ -59,6 +59,9 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
+                    <Button.ToolTip>
+                        <ToolTip Content="{Binding currentDir}"/>
+                    </Button.ToolTip>
                 </Button>
                 <!--Menu Section-->
                 <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />

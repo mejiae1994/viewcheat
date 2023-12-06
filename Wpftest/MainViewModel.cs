@@ -35,6 +35,20 @@ namespace Wpftest
             }
         }
 
+        private string _currentDir = "Loading Directory";
+        public string currentDir
+        {
+            get { return _currentDir; }
+            set
+            {
+                if (_currentDir != value)
+                {
+                    _currentDir = value;
+                    OnPropertyChanged(nameof(currentDir));
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel(string currentDirectory)
@@ -47,6 +61,7 @@ namespace Wpftest
             IsLoading = true;
             Images = await ImageLoader.LoadImagesAsync(currentDirectory);
             IsLoading = false;
+            currentDir = currentDirectory;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
