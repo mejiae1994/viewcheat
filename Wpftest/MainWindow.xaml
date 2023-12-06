@@ -65,7 +65,7 @@
                 </Button>
                 <!--Menu Section-->
                 <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />
-                <Button Margin="0 0 4 0" Click="Minimize_Button" Grid.Column="2" Background="#FFB4B4D4" Content="-" FontSize="16" Cursor="Hand">
+                <Button ToolTipService.InitialShowDelay="10" Margin="0 0 4 0" Click="Minimize_Button" Grid.Column="2" Background="#FFB4B4D4" Content="-" FontSize="16" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Height="30" CornerRadius="5"
@@ -74,8 +74,11 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
+                    <Button.ToolTip>
+                        <ToolTip Content="Minimize"/>
+                    </Button.ToolTip>
                 </Button>
-                <Button Margin="0 0 4 0" Click="Close_Button" Grid.Column="3" Background="#FFB4B4D4" Content="X" FontSize="16" Cursor="Hand">
+                <Button ToolTipService.InitialShowDelay="10" Margin="0 0 4 0" Click="Close_Button" Grid.Column="3" Background="#FFB4B4D4" Content="X" FontSize="16" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Height="30" CornerRadius="5"
@@ -84,6 +87,9 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
+                    <Button.ToolTip>
+                        <ToolTip Content="Exit"/>
+                    </Button.ToolTip>
                 </Button>
             </Grid>
             <ListBox ItemsSource="{Binding Images}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
