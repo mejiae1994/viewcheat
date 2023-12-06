@@ -44,21 +44,16 @@
         </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="70"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="25"/>
                     <ColumnDefinition Width="25"/>
                 </Grid.ColumnDefinitions>
                 <!--Menu Section-->
-                <Button Grid.Column="0" Background="#FFB4B4D4">
-                    <Menu>
-                        <MenuItem Header="=" Background="#FFB4B4D4">
-                            <MenuItem x:Name="MenuChangeDirectory" Header="Change Directory" Click="MenuChangeDirectory_CLick"/>
-                        </MenuItem>
-                    </Menu>
+                <Button Grid.Column="0" FontSize="12" FontWeight="Medium" Content="Change DIR" Cursor="Hand" Background="#FFB4B4D4" Click="MenuChangeDirectory_CLick">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Height="25" CornerRadius="5"
+                            <Border Height="25" CornerRadius="3"
                                 Background="{TemplateBinding Background}">
                                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>

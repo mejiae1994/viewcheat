@@ -41,8 +41,6 @@ namespace Wpftest
             {
                 using (FileStream SourceStream = new FileStream(imgPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.Asynchronous))
                 {
-
-                    //sourceCollection.Add(await CreateBitMapImage(imgPath));
                     ImageModel imgModel = new()
                     {
                         imgSource = await CreateBitMapImageFromFile(imgPath),
