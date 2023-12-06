@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.IO;
 using System.Windows;
 
 namespace Wpftest
@@ -13,8 +15,16 @@ namespace Wpftest
             base.OnStartup(e);
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            string currentDirectory = config.AppSettings.Settings["directoryPath"].Value;
-            MainViewModel viewModel = new MainViewModel(currentDirectory);
+            string configDirectory = config.AppSettings.Settings["directoryPath"].Value;
+
+            if (String.IsNullOrEmpty(configDirectory))
+            {
+                config.AppSettings.Settings["directoryPath"].Value = Directory.GetCurrentDirectory();
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(config.AppSettings.SectionInformation.Name);
+            }
+
+            MainViewModel viewModel = new MainViewModel(config.AppSettings.Settings["directoryPath"].Value);
             MainWindow mainWindow = new MainWindow(config);
             mainWindow.DataContext = viewModel;
             mainWindow.Show();

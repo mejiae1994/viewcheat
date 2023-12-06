@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,7 +40,6 @@ namespace Wpftest
         public MainWindow(Configuration config)
         {
             _config = config;
-            InitImageDirectory();
             InitializeComponent();
             AddNotifyIcon();
         }
@@ -58,16 +56,6 @@ namespace Wpftest
             void TrayIconClick(object? sender, EventArgs e)
             {
                 BringWindowToFront();
-            }
-        }
-
-        private void InitImageDirectory()
-        {
-            KeyValueConfigurationCollection section = _config.AppSettings.Settings;
-
-            if (String.IsNullOrEmpty(section[DIRECTORYPATH_KEY].Value))
-            {
-                SaveNewDirectoryPath(Directory.GetCurrentDirectory());
             }
         }
 
