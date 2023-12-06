@@ -37,11 +37,11 @@
     </Window.Resources>
 
     <Border Background="#FF3D3D4D" CornerRadius="5">
-    <Grid Margin="25">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <Grid Margin="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
@@ -92,7 +92,9 @@
                     </Button.ToolTip>
                 </Button>
             </Grid>
-            <ListBox ItemsSource="{Binding Images}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
+            <TextBlock Grid.Row="1" Text="{Binding imageCount}" FontSize="15" Foreground="#FFF0F0F0" />
+            <TextBlock Text="Loading" FontSize="100" Visibility="{Binding loadingTextBlock}" Foreground="#FFF0F0F0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="396,283,0,0" Grid.Row="1"/>
+            <ListBox ItemsSource="{Binding Images}" Visibility="{Binding listBoxVisibility}" IsSynchronizedWithCurrentItem="True" Background="#FFDDDDEB" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" KeyDown="ImgList_KeyDown" Padding="10" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Margin="0,25,0,0" KeyboardNavigation.TabNavigation="Cycle" x:Name="ImgList" SelectionMode="Single">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <ListBoxItem Padding="10" Width="300" Height="320">
@@ -109,6 +111,6 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
-    </Grid>
+        </Grid>
     </Border>
 </Window>

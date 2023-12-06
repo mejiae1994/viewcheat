@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 
 namespace Wpftest
 {
@@ -49,6 +50,44 @@ namespace Wpftest
             }
         }
 
+        private string _imageCount;
+        public string imageCount
+        {
+            get { return _imageCount; }
+            set
+            {
+                if (_imageCount != value)
+                {
+                    _imageCount = value;
+                    OnPropertyChanged(nameof(imageCount));
+                }
+            }
+        }
+
+        private Visibility _listBoxVisibility;
+
+        public Visibility listBoxVisibility
+        {
+            get { return _listBoxVisibility; }
+            set
+            {
+                _listBoxVisibility = value;
+                OnPropertyChanged(nameof(listBoxVisibility));
+            }
+        }
+
+        private Visibility _loadingTextBlock;
+
+        public Visibility loadingTextBlock
+        {
+            get { return _loadingTextBlock; }
+            set
+            {
+                _loadingTextBlock = value;
+                OnPropertyChanged(nameof(loadingTextBlock));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel(string currentDirectory)
@@ -58,10 +97,14 @@ namespace Wpftest
 
         public async void getImageSources(string currentDirectory)
         {
-            IsLoading = true;
+            imageCount = "";
+            listBoxVisibility = Visibility.Collapsed;
+            loadingTextBlock = Visibility.Visible;
             Images = await ImageLoader.LoadImagesAsync(currentDirectory);
-            IsLoading = false;
+            loadingTextBlock = Visibility.Collapsed;
+            listBoxVisibility = Visibility.Visible;
             currentDir = currentDirectory;
+            imageCount = $"Images Loaded: {Images?.Count ?? 0}";
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

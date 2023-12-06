@@ -202,6 +202,8 @@ namespace Wpftest
                 {
                     viewModel.getImageSources(currentDirectory);
                 }
+                ImgList.Focus();
+                ImgList.SelectedIndex = 0;
             }
         }
 

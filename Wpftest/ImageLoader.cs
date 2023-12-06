@@ -12,7 +12,7 @@ namespace Wpftest
 
     public static class ImageLoader
     {
-        private static readonly string[] ImageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".svg" };
+        private static readonly string[] ImageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
 
         public static async Task<ObservableCollection<ImageModel>> LoadImagesAsync(string currentDirectory)
         {
