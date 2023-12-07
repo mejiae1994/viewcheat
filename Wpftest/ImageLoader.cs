@@ -32,7 +32,7 @@ namespace Wpftest
             return new ObservableCollection<ImageModel>();
         }
 
-        private static async Task<ObservableCollection<ImageModel>> LoadImagesFromPaths(IEnumerable<string> imgPaths)
+        public static async Task<ObservableCollection<ImageModel>> LoadImagesFromPaths(IEnumerable<string> imgPaths)
         {
             ObservableCollection<ImageModel> sourceCollection = new ObservableCollection<ImageModel>();
             Stopwatch watch = new System.Diagnostics.Stopwatch();
@@ -55,7 +55,7 @@ namespace Wpftest
             return sourceCollection;
         }
 
-        private static async Task<BitmapImage> CreateBitMapImageFromFile(string imgPath)
+        public static async Task<BitmapImage> CreateBitMapImageFromFile(string imgPath)
         {
             return await Task.Run(() =>
             {
@@ -74,7 +74,7 @@ namespace Wpftest
             });
         }
 
-        private static string GetFileNameNoExt(string uri)
+        public static string GetFileNameNoExt(string uri)
         {
             string[] uriParts = uri.Split('\\');
             return Path.GetFileNameWithoutExtension(uriParts[uriParts.Length - 1]);

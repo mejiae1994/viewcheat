@@ -200,7 +200,7 @@ namespace Wpftest
                 string currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
                 if (DataContext is MainViewModel viewModel)
                 {
-                    viewModel.getImageSources(currentDirectory);
+                    viewModel.getImageSourcesByChunk(currentDirectory);
                 }
                 ImgList.Focus();
                 ImgList.SelectedIndex = 0;
