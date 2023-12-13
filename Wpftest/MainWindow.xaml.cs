@@ -67,27 +67,17 @@ namespace Wpftest
             }
             else if (WindowState == WindowState.Normal || WindowState == WindowState.Maximized)
             {
+                Hide();
                 WindowState = WindowState.Minimized;
             }
         }
 
         private void BringWindowToFront()
         {
+            Show();
             WindowState = WindowState.Normal;
             Activate();
             Focus();
-        }
-
-        private void Window_StateChanged(object sender, EventArgs e)
-        {
-            if (WindowState == WindowState.Minimized)
-            {
-                ShowInTaskbar = false;
-            }
-            else
-            {
-                ShowInTaskbar = true;
-            }
         }
 
         protected override void OnSourceInitialized(EventArgs e)
