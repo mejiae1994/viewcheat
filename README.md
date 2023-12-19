@@ -1,6 +1,8 @@
 # Simple WPF App (viewcheat)
 
-This is a simple WPF app that integrates global hotkeys and windows notification area for conviniently viewing my personal cheatsheets on the fly. 
+This is a simple WPF app that integrates global hotkeys and windows notification area for conveniently viewing my personal cheatsheets on the fly.
+
+![Mapeeter main page preview](./viewcheat/project-image.PNG)
 
 ## Features
 
@@ -9,9 +11,7 @@ This is a simple WPF app that integrates global hotkeys and windows notification
 - Load images asynchronously in chunks.
 - Notification area icon.
 
-## Learning Experience
-
-This project provided insights into:
+## Highlights
 
 - Async operations such as File I/O.
 - Batch/Chunk loading of resources.
