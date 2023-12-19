@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace Wpftest
+namespace viewcheat
 {
     public class ImageModel
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Wpftest
+namespace viewcheat
 {
     public class MainViewModel : INotifyPropertyChanged
     {

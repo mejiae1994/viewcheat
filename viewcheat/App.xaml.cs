@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Windows;
 
-namespace Wpftest
+namespace viewcheat
 {
     /// <summary>
     /// Interaction logic for App.xaml

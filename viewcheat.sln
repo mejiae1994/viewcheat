@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpftest", "Wpftest\Wpftest.csproj", "{9C84B584-4F6A-4166-B853-694075455BE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "viewcheat", "viewcheat\viewcheat.csproj", "{9C84B584-4F6A-4166-B853-694075455BE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace Wpftest
+namespace viewcheat
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
