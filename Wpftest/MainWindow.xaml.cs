@@ -211,5 +211,16 @@ namespace Wpftest
                 Console.WriteLine(ex.Message);
             }
         }
+
+        private void Reload_Click(object sender, RoutedEventArgs e)
+        {
+            string currentDirectory = _config.AppSettings.Settings[DIRECTORYPATH_KEY].Value;
+            if (DataContext is MainViewModel viewModel)
+            {
+                viewModel.getImageSourcesByChunk(currentDirectory);
+            }
+            ImgList.Focus();
+            ImgList.SelectedIndex = 0;
+        }
     }
 }

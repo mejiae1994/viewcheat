@@ -121,13 +121,12 @@ namespace Wpftest
 
             string[] ImageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
 
-            var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => ImageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase)));
+            var directoryFiles = Directory.GetFiles(currentDirectory).Where(file => ImageExtensions.Any(ext => file.EndsWith(ext, StringComparison.OrdinalIgnoreCase))).ToArray();
 
             List<ImageModel> localSource = new List<ImageModel>();
             Images.Clear();
 
-
-            if (directoryFiles.Count() < 9)
+            if (directoryFiles.Length < 9)
             {
                 Images = await ImageLoader.LoadImagesAsync(currentDirectory);
                 loadingTextBlock = Visibility.Collapsed;
@@ -139,9 +138,9 @@ namespace Wpftest
                 return;
             }
 
-            for (var i = 0; i < directoryFiles.Count(); i++)
+            for (var i = 0; i < directoryFiles.Length; i++)
             {
-                var imgPath = directoryFiles.ElementAt(i);
+                var imgPath = directoryFiles[i];
 
                 ImageModel imgModel = new()
                 {
@@ -153,7 +152,7 @@ namespace Wpftest
                 localSource.Add(imgModel);
 
                 //we have done 10 iterations or have gotten to the end
-                if (i % 9 == 0 || i == (directoryFiles.Count() - 1))
+                if (i % 9 == 0 || i == (directoryFiles.Length - 1))
                 {
                     foreach (var source in localSource)
                     {

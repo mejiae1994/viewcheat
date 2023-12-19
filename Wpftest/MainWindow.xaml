@@ -62,6 +62,16 @@
                         <ToolTip Content="{Binding currentDir}"/>
                     </Button.ToolTip>
                 </Button>
+                <Button ToolTipService.InitialShowDelay="10" ToolTipService.HorizontalOffset="230" ToolTipService.VerticalOffset="-35" Grid.Column="1" FontSize="12" FontWeight="Medium" Content="Reload"  Panel.ZIndex="2" Cursor="Hand" Background="#FFB4B4D4" Click="Reload_Click" Margin="2,-2,958,-2" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Height="25" CornerRadius="3"
+                                Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 <!--Menu Section-->
                 <TextBlock Grid.Column="1" Text="CheatSheets" FontSize="28" TextAlignment="Center" Foreground="#FFF0F0F0" />
                 <Button ToolTipService.InitialShowDelay="10" Margin="0 0 4 0" Click="Minimize_Button" Grid.Column="2" Background="#FFB4B4D4" Content="-" FontSize="16" Cursor="Hand">
